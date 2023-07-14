@@ -31,7 +31,7 @@ class UserProfileManager(BaseUserManager):
         #is_superuser is automatically created by permissionsmixin
         user.is_superuser = True
         user.is_staff = True
-        user.save(using =self._db)
+        user.save(using=self._db)
 
         return user
 
@@ -46,7 +46,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     #overriding the default function as they uses username as part of the authentication
     USERNAME_FIELD="email"
-    REQUIRED_FIELD=["name"]
+    REQUIRED_FIELDS=["name"]
 
     #because we are defining a function in the class itself, we need the self:
     def get_full_name(self):
