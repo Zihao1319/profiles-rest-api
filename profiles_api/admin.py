@@ -4,3 +4,4 @@ from profiles_api import models
 
 # enable admin to use the models
 admin.site.register(models.UserProfile)
+admin.site.register(models.ProfileFeedItem)

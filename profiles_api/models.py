@@ -3,12 +3,15 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
-
+from django.conf import settings
 # Create your models here.
 
 
+
+#managers are responsible for creating, retrieving, updating, and deleting model instances in the database.
+#link to ref: https://nlbsg.udemy.com/course/django-python/learn/lecture/6955156#questions/6393892
 class UserProfileManager(BaseUserManager):
-    """manager for user profiles"""
+    """custom method: manager for user profiles"""
 
     def create_user(self, email, name, password=None):
         """create a new user profile"""
@@ -16,6 +19,8 @@ class UserProfileManager(BaseUserManager):
             raise ValueError("User must have an email address")
 
         email = self.normalize_email(email)
+
+        #creating an instance of the user model with email and name
         user = self.model(email=email, name=name)
 
         #django will automatically encrypt the password, 
@@ -59,3 +64,19 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """return string representation of our user"""
         return self.email
+
+
+# model representation below, profilefeeditem inherits from models.Model (base class)
+class ProfileFeedItem(models.Model):
+    """profile status update"""
+    user_profile = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete = models.CASCADE,
+    )
+    status_text = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add= True)
+
+
+    def __str__(self):
+        """return model as string"""
+        return self.status_text
